@@ -1,7 +1,5 @@
 import sys
-from movie_analyzer.domain.movie_filter import MovieFilter
 from movie_analyzer.domain.criteria import Criteria
-from movie_analyzer.domain.criteria_with_movie_filters import CriteriaWithMovieFilters
 from movie_analyzer.storage.movie_in_memory_store import MovieInMemoryStore
 from movie_analyzer.services.ingestion_service import CSVIngestionService
 from movie_analyzer.services.suggestions_service import SuggestionsService
@@ -19,20 +17,14 @@ def main():
 
     ingestion_service.ingest_movies()
 
-    # criteria = Criteria(
-    #     filter={'certified_fresh': True},
-    #     sort_key='rating',
-    #     sort_order= 'DESC',
-    #     max_rows= 10
-    # )
-    criteria = CriteriaWithMovieFilters(
-        filters=[MovieFilter.of({'certified_fresh': True})],
+    criteria = Criteria(
+        filter={'certified_fresh': True},
         sort_key='rating',
         sort_order= 'DESC',
         max_rows= 10
     )
 
-    suggested_movies = suggestion_service.suggest_by_criteria_new(criteria)
+    suggested_movies = suggestion_service.suggest_by_criteria(criteria)
 
     print("Suggested Movies:")
     for idx, movie in enumerate(suggested_movies, 1):

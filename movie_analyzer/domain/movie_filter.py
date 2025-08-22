@@ -4,6 +4,9 @@ from typing import Any, Callable, Dict
 from movie_analyzer.domain.movie import Movie
 
 class MovieFilter(ABC):
+    """MovieFilter is not yet used but demonstrates how to resolve different types
+    of filters avoiding runtime type checking anti patterns.
+    """
     @abstractmethod
     def isOK(self, movie: Movie) -> bool:
         pass
