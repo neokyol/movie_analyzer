@@ -10,6 +10,11 @@ class Movie:
        
     @staticmethod
     def from_list(movie_as_list: list[Any]):
+        """Returns an instance from a list of elements matching this class.
+        
+        Args:
+           movie_as_list: a list of this class attributes in order 
+        """
         try:
             return Movie(
                 id=int(movie_as_list[0]),

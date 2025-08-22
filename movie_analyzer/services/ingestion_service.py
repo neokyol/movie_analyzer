@@ -1,4 +1,5 @@
 import csv
+import logging
 
 from abc import ABC, abstractmethod
 from typing import Any
@@ -7,6 +8,8 @@ from movie_analyzer.storage.movie_store import MovieStore
 from movie_analyzer.domain.movie import Movie
 
 class IngestionService(ABC):
+    logger = logging.getLogger('IngestionService')
+
     def __init__(self, movie_store: MovieStore):
         self.movie_store = movie_store
         self.movie_list = []
@@ -16,11 +19,20 @@ class IngestionService(ABC):
         pass
 
     def ingest_movies(self):
+        """Runs the service."""
+        self.logger.info("Ingestion started.")
         movies: list[Movie] = self.fetch_movies()
 
         self.movie_store.save_movies(movies)
+        self.logger.info("Ingestion ended. Processed movies = %d.", len(movies))
 
 class CSVIngestionService(IngestionService):
+    """IngestionService implementation to load movies from a CSV file and save them in the provided store.
+
+    Attributes:
+        file: filename with full path to the CSV file.
+        movie_store: the store to save the data to.
+    """
     def __init__(self, movie_store: MovieStore, file: str):
         super().__init__(movie_store)
         self.file = file
